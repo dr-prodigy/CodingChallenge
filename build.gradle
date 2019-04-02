@@ -1,0 +1,37 @@
+group 'sc.com'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'MainClass'
+        )
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'MainClass'
+    }
+    baseName = 'CodingChallenge-fatJar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.9.4'
+    compile "cglib:cglib:2.2"
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.4'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+}
